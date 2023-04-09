@@ -24,7 +24,11 @@
         v-bind:value="language.locale"
         v-on:change="handleLanguage($event.currentTarget.value)"
       >
-        <option v-for="item in languages" v-bind:value="item.locale">
+        <option
+          v-for="item in languages"
+          v-bind:value="item.locale"
+          v-bind:key="item.locale"
+        >
           {{ item.name }}
         </option>
       </select>
@@ -92,13 +96,13 @@ export default {
   data() {
     return {
       languages,
-      language: languages[0],
+      language: languages[0]
     };
   },
   methods: {
     handleLanguage(locale) {
       // find the language in languages variable
-      var filtered = languages.filter(function (item) {
+      var filtered = languages.filter(function(item) {
         return item.locale === locale;
       });
 
@@ -115,11 +119,11 @@ export default {
 
       // save to user's setting
       // localStorage.setItem("language", this.language.locale)
-    },
+    }
   },
   mounted() {
     // get the user's setting
     this.handleLanguage(/* localStorage.getItem("language") */);
-  },
+  }
 };
 </script>
