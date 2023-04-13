@@ -1,10 +1,46 @@
+<script>
+import languages from "./languages";
+
+export default {
+  data() {
+    return {
+      languages,
+      language: languages[0]
+    };
+  },
+  methods: {
+    handleLanguage(locale) {
+      // find the language in languages variable
+      var filtered = languages.filter(function(item) {
+        return item.locale === locale;
+      });
+
+      // get the actual existing language
+      if (filtered.length >= 1) {
+        this.language = filtered[0];
+      } else {
+        this.language = languages[0];
+      }
+      // do stuff on this website
+      document.documentElement.lang = this.language.locale;
+      document.documentElement.style.fontFamily = this.language.fontFamily;
+      document.title = this.language.title;
+
+      // save to user's setting
+      // localStorage.setItem("language", this.language.locale)
+    }
+  },
+  mounted() {
+    // get the user's setting
+    this.handleLanguage(/* localStorage.getItem("language") */);
+  }
+};
+</script>
+
 <template>
   <div class="uk-padding" uk-grid>
     <div class="uk-width-expand@s">
-      <h3
-        class="uk-margin-small"
-        v-bind:style="{ fontFamily: language.fontFamily }"
-      >
+      <h3 class="uk-margin-small" :style="{ fontFamily: language.fontFamily }">
         {{ language["head_line"] }}
       </h3>
       <p class="uk-margin-small">
@@ -21,13 +57,13 @@
     <div class="uk-width-auto@s">
       <select
         class="uk-select"
-        v-bind:value="language.locale"
-        v-on:change="handleLanguage($event.currentTarget.value)"
+        :value="language.locale"
+        @change="handleLanguage($event.currentTarget.value)"
       >
         <option
           v-for="item in languages"
-          v-bind:value="item.locale"
-          v-bind:key="item.locale"
+          :value="item.locale"
+          :key="item.locale"
         >
           {{ item.name }}
         </option>
@@ -86,44 +122,3 @@
     </div>
   </div>
 </template>
-
-<script>
-import languages from "./languages";
-
-export default {
-  name: "App",
-  components: {},
-  data() {
-    return {
-      languages,
-      language: languages[0]
-    };
-  },
-  methods: {
-    handleLanguage(locale) {
-      // find the language in languages variable
-      var filtered = languages.filter(function(item) {
-        return item.locale === locale;
-      });
-
-      // get the actual existing language
-      if (filtered.length >= 1) {
-        this.language = filtered[0];
-      } else {
-        this.language = languages[0];
-      }
-      // do stuff on this website
-      document.documentElement.lang = this.language.locale;
-      document.documentElement.style.fontFamily = this.language.fontFamily;
-      // document.title = this.language.title
-
-      // save to user's setting
-      // localStorage.setItem("language", this.language.locale)
-    }
-  },
-  mounted() {
-    // get the user's setting
-    this.handleLanguage(/* localStorage.getItem("language") */);
-  }
-};
-</script>
