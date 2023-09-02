@@ -1,23 +1,17 @@
 <script setup>
-import { computed, ref, watch } from "vue";
-import { useMeta } from 'vue-meta'
+import { ref, watch } from "vue";
 import language from "./language.json";
 
 const lang = ref('en')
-const { meta } = useMeta({
-  title: 'My Title',
-})
+const translate = ref(language[lang.value])
 
-const translate = computed(() => {
-  document.documentElement.lang = lang.value;
-  return language[lang.value]
-})
-
-watch(translate,() => {
-  document.documentElement.style.fontFamily = translate.fontFamily;
-  document.title = translate.title;
-  // document.querySelector('[rel="stylesheet"]').setAttribute('href', translate.fontSrc)
-})
+watch(lang, (newLang) => {
+  document.documentElement.lang = newLang;
+  translate.value = language[newLang]
+  document.documentElement.style.fontFamily = translate.value.fontFamily;
+  document.title = translate.value.title;
+  document.querySelector('[rel="stylesheet"]').setAttribute('href', translate.value.fontSrc)
+}, { immediate: true })
 
 </script>
 
@@ -41,10 +35,7 @@ watch(translate,() => {
     <div class="">
       <select
         class="border p-2"
-        :value="lang"
-        @change=" 
-          lang = $event.currentTarget.value
-        "
+        v-model="lang"
       >
         <option
           v-for="locale in Object.keys(language)"
@@ -61,7 +52,7 @@ watch(translate,() => {
     <div class="sm:row-span-2 md:row-span-2 p-2 md:p-3 lg:p-4">
       <img
         class="rounded"
-        src="https://cdn.pixabay.com/photo/2017/12/17/21/44/coffee-3025022_960_720.jpg"
+        src="https://cdn.leonardo.ai/users/87e86c7c-bff9-4f33-a0db-2bf812d319fc/generations/e3cfb088-048c-4be3-92c5-9b3de0c4b14d/variations/Default_Luis_Royo_style_illustration_of_a_beautiful_longhaired_2_e3cfb088-048c-4be3-92c5-9b3de0c4b14d_1.jpg"
         alt="Image"
       />
       <p class="mt-6 text-justify">
