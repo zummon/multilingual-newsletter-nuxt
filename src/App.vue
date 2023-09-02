@@ -1,13 +1,22 @@
 <script setup>
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
+import { useMeta } from 'vue-meta'
 import language from "./language.json";
 
 const lang = ref('en')
+const { meta } = useMeta({
+  title: 'My Title',
+})
+
 const translate = computed(() => {
   document.documentElement.lang = lang.value;
+  return language[lang.value]
+})
+
+watch(translate,() => {
   document.documentElement.style.fontFamily = translate.fontFamily;
   document.title = translate.title;
-  return language[lang.value]
+  // document.querySelector('[rel="stylesheet"]').setAttribute('href', translate.fontSrc)
 })
 
 </script>
